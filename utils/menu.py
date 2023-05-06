@@ -3,7 +3,6 @@ import logging
 import time
 
 from utils.enumeration import enumerate_card_num
-
 from utils.file_manager import FileManager
 
 logging.getLogger().setLevel(logging.INFO)
@@ -61,6 +60,13 @@ def console_menu() -> None:
         card_num = enumerate_card_num(hash, last_num, bins, args.enumeration)
         finish = time.perf_counter()
         if card_num:
-            files.write_text(card_num, files.card_num_file_path)
             logging.info(
-                f"The card number matches the given hash was found: {card_num}")
+                f"The card number matches the given hash was found")
+            files.write_text(card_num, files.card_num_file_path)
+            if args.statistics:
+                files.write_statistic(args.enumeration, finish - start)
+                logging.info(
+                    "Statistics on the enumeration of the"
+                    "card number was written to a .csv file")
+        else:
+            logging.info("The true card number was not found")

@@ -1,3 +1,4 @@
+import csv
 import json
 import logging
 import sys
@@ -107,3 +108,21 @@ class FileManager:
                 f"List was not read from file {self.__bins_file_path}")
             sys.exit(err)
         return bins
+    
+    def write_statistic(self, cores: int, time: float) -> None:
+        """
+        Method appends statistic data to the end of the file
+
+        :param cores - number of cores
+        :param time - time of enumerate
+        """
+        try:
+            with open(self.__statistic_file_path, mode="a", newline="") as csv_file:
+                writer = csv.writer(csv_file)
+                writer.writerow([cores, time])
+            logging.info(
+                f"Statistic written to file {self.__statistic_file_path}")
+        except OSError as err:
+            logging.warning(
+                f"Statistics wasn't written to the file {self.__statistic_file_path}")
+            sys.exit(err)
