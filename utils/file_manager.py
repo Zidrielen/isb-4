@@ -7,7 +7,7 @@ logging.getLogger().setLevel(logging.INFO)
 SETTINGS_FILE = "files/settings.json"
 
 
-class FileManager:
+class FileController:
     """Class for working with program files"""
 
     def __init__(self, json_file: str = SETTINGS_FILE) -> None:
@@ -30,6 +30,10 @@ class FileManager:
     @property
     def last_num_file_path(self) -> str:
         return self.__last_numbers_file_path
+    
+    @property
+    def card_num_file_path(self) -> str:
+        return self.__card_num_file_path
     
     @property
     def card_num_file_path(self) -> str:
@@ -117,7 +121,7 @@ class FileManager:
         :param time - time of enumerate
         """
         try:
-            with open(self.__statistic_file_path, mode="a", newline="") as csv_file:
+            with open(self.__statistic_file_path, "a", newline="") as csv_file:
                 writer = csv.writer(csv_file)
                 writer.writerow([cores, time])
             logging.info(

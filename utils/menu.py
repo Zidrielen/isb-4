@@ -3,7 +3,8 @@ import logging
 import time
 
 from utils.enumeration import enumerate_card_num
-from utils.file_manager import FileManager
+from utils.file_manager import FileController
+from utils.luhn import luhn_algorithm
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -51,7 +52,7 @@ def console_menu() -> None:
              "file with statistics"
     )
     args = parser.parse_args()
-    files = FileManager(args.settings) if args.settings else FileManager()
+    files = FileController(args.settings) if args.settings else FileController()
     if args.enumeration:
         hash = files.read_text(files.hash_file_path)
         last_num = files.read_text(files.last_num_file_path)
@@ -65,8 +66,11 @@ def console_menu() -> None:
             files.write_text(card_num, files.card_num_file_path)
             if args.statistics:
                 files.write_statistic(args.enumeration, finish - start)
-                logging.info(
-                    "Statistics on the enumeration of the"
-                    "card number was written to a .csv file")
         else:
-            logging.info("The true card number was not found")
+            logging.info("The card number wasn't found")
+    elif args.luhn:
+        card_number = files.read_text(files.card_num_file_path)
+        if luhn_algorithm(card_number):
+            logging.info("The card number is correct")
+        else:
+            logging.info("The card number isn't correct")
