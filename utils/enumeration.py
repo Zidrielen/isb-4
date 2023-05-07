@@ -4,8 +4,6 @@ from typing import Union, Optional
 
 from tqdm import tqdm
 
-CORES = mp.cpu_count()
-
 
 def check_card_number(
     main_card_number_part: int,
@@ -35,7 +33,7 @@ def enumerate_card_num(
     original_hash: str,
     last_numbers: str,
     bins: tuple,
-    pools: int = CORES
+    pools: int
 ) -> Optional[str]:
     """
     The function enumerates the true card number by known hash

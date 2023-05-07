@@ -22,6 +22,7 @@ class FileController:
         self.__bins_file_path = settings["bins_file"]
         self.__card_num_file_path = settings["card_number_file"]
         self.__statistic_file_path = settings["statistic_file"]
+        self.__visual_directory = settings["visual_directory"]
 
     @property
     def hash_file_path(self) -> str:
@@ -36,8 +37,8 @@ class FileController:
         return self.__card_num_file_path
     
     @property
-    def card_num_file_path(self) -> str:
-        return self.__card_num_file_path
+    def visual_directory(self) -> str:
+        return self.__visual_directory
 
     @staticmethod
     def __read_settings(settings_file: str) -> dict:
@@ -122,7 +123,7 @@ class FileController:
         """
         try:
             with open(self.__statistic_file_path, "a", newline="") as csv_file:
-                writer = csv.writer(csv_file)
+                writer = csv.writer(csv_file, delimiter=" ")
                 writer.writerow([cores, time])
             logging.info(
                 f"Statistic written to file {self.__statistic_file_path}")
@@ -130,3 +131,23 @@ class FileController:
             logging.warning(
                 f"Statistics wasn't written to the file {self.__statistic_file_path}")
             sys.exit(err)
+    
+    def load_stats(self) -> dict:
+        """
+        The function loads statistics from txt file
+
+        :return - statistics of enumerate
+        """
+        statistics = {}
+        try:
+            with open(self.__statistic_file_path, "r") as text_file:
+                lines = text_file.readlines()
+        except OSError as err:
+            logging.warning(
+                f"Statistics wasn't read from the file {self.__statistic_file_path}")
+        for line in lines:
+            line = list(map(float, line.split()))
+            statistics[line[0]] = line[1]
+        logging.info(
+            f"Statistics was successfully read from the file {self.__statistic_file_path}")
+        return statistics

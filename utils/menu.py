@@ -5,6 +5,7 @@ import time
 from utils.enumeration import enumerate_card_num
 from utils.file_manager import FileController
 from utils.luhn import luhn_algorithm
+from utils.graph_builder import visualize_statistics
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -74,3 +75,6 @@ def console_menu() -> None:
             logging.info("The card number is correct")
         else:
             logging.info("The card number isn't correct")
+    elif args.visualization:
+        stats = files.load_stats()
+        visualize_statistics(stats, files.visual_directory)
